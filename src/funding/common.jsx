@@ -47,7 +47,7 @@ export type LabelOptions = {|
     nonce : ?string,
     tagline : ?boolean,
     content : ?ContentType,
-    divideLogoAnimationLabel : ?ChildType
+    buttonAnimationLabel : ?ChildType
 |};
 
 export type WalletLabelOptions = {|

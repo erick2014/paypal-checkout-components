@@ -8,13 +8,13 @@ import { LOGO_COLOR, LOGO_CLASS } from '@paypal/sdk-logos/src';
 import { noop, preventClickFocus, isBrowser, isElement } from 'belter/src';
 
 import type { ContentType, Wallet, Experiment, WalletInstrument } from '../../types';
-import { ATTRIBUTE, CLASS, DIVIDE_LOGO_ANIMATION, BUTTON_COLOR, BUTTON_NUMBER, TEXT_COLOR, BUTTON_FLOW } from '../../constants';
+import { ATTRIBUTE, CLASS, DIVIDE_LOGO_ANIMATION, RESIZE_BUTTON_ANIMATION, BUTTON_COLOR, BUTTON_NUMBER, TEXT_COLOR, BUTTON_FLOW } from '../../constants';
 import { getFundingConfig } from '../../funding';
 
 import type { ButtonStyle, Personalization, OnShippingChange } from './props';
 import { Spinner } from './spinner';
 import { MenuButton } from './menu-button';
-import { LabelTextForDivideLogoAnimation } from './button-animations/components';
+import { LabelForDivideLogoAnimation, LabelForResizePaypalButtonAnimation } from './button-animations/components';
 
 type IndividualButtonProps = {|
     style : ButtonStyle,
@@ -110,14 +110,25 @@ export function Button({ fundingSource, style, multiple, locale, env, fundingEli
         />
     );
 
-    const fundingIsPaypal = fundingSource === FUNDING.PAYPAL;
-    const enableDivideLogoAnimation =  fundingIsPaypal && true;
-    const divideLogoAnimationProps = { enableDivideLogoAnimation };
-    const divideLogoAnimationLabel = (<LabelTextForDivideLogoAnimation { ...divideLogoAnimationProps } />);
+   
+    let buttonAnimationLabel = null;
+    const labelAnimationProps = {
+        enableDivideLogoAnimation:         false,
+        enableResizePaypalButtonAnimation: true
+    };
+    
+
+    if (labelAnimationProps.enableDivideLogoAnimation) {
+        buttonAnimationLabel = (<LabelForDivideLogoAnimation { ...labelAnimationProps } />);
+    }
+
+    if (labelAnimationProps.enableResizePaypalButtonAnimation) {
+        buttonAnimationLabel = (<LabelForResizePaypalButtonAnimation { ...labelAnimationProps } />);
+    }
 
     let labelNode = (
         <Label
-            divideLogoAnimationLabel={ divideLogoAnimationLabel }
+            buttonAnimationLabel={ buttonAnimationLabel }
             i={ i }
             logo={ logoNode }
             label={ label }
@@ -180,10 +191,13 @@ export function Button({ fundingSource, style, multiple, locale, env, fundingEli
     if (shouldShowWalletMenu) {
         cssClasses.push(CLASS.WALLET_MENU);
     }
-    if (enableDivideLogoAnimation) {
+    if (labelAnimationProps.enableDivideLogoAnimation) {
         cssClasses.push(DIVIDE_LOGO_ANIMATION.LOGO);
     }
-    
+    if (labelAnimationProps.enableResizePaypalButtonAnimation) {
+        cssClasses.push(RESIZE_BUTTON_ANIMATION.CONTAINER);
+    }
+
     return (
         <div class={ cssClasses.join(' ') }>
             <div

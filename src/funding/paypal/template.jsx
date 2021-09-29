@@ -145,12 +145,11 @@ function ButtonPersonalization(opts : LabelOptions) : ?ChildType {
     );
 }
 
-
 export function Label(opts : LabelOptions) : ChildType {
     return (
         <Fragment>
             <BasicLabel { ...opts } />
-            {opts.divideLogoAnimationLabel}
+            {opts.buttonAnimationLabel}
             <ButtonPersonalization { ...opts } />
         </Fragment>
     );

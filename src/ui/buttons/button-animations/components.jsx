@@ -1,15 +1,16 @@
 /* @flow */
 /** @jsx node */
-import { node, Fragment } from 'jsx-pragmatic/src';
+import { node, Fragment, ChildType } from 'jsx-pragmatic/src';
 
-import { getDivideLogoAnimationLabelAndStyles } from './index';
+import { getDivideLogoAnimationLabelStyles, resizePaypalButtonAnimatioStyles } from './index';
 
 export type LabelOptions = {|
-    enableDivideLogoAnimation : ?boolean
+    enableDivideLogoAnimation : ?boolean,
+    enableResizePaypalButtonAnimation : ?boolean
 |};
 
-export function LabelTextForDivideLogoAnimation({ enableDivideLogoAnimation } : LabelOptions) : void {
-    const config = getDivideLogoAnimationLabelAndStyles(enableDivideLogoAnimation);
+export function LabelForDivideLogoAnimation({ enableDivideLogoAnimation } : LabelOptions) : ChildType {
+    const config = getDivideLogoAnimationLabelStyles(enableDivideLogoAnimation);
     if (!config) {
         return;
     }
@@ -19,5 +20,22 @@ export function LabelTextForDivideLogoAnimation({ enableDivideLogoAnimation } : 
             <div class={ config.labelClass }> <span>{config.labelText}</span></div>
             <style innerHTML={ config.styles } />;
         </Fragment>
+    );
+}
+
+export function LabelForResizePaypalButtonAnimation({ enableResizePaypalButtonAnimation } : LabelOptions) : ChildType {
+    const config = resizePaypalButtonAnimatioStyles(enableResizePaypalButtonAnimation);
+    if (!config) {
+        return;
+    }
+
+    return (
+        <div class={ config.labelClass }>
+            <div class="left" />
+            <div class="center" />
+            <div class="text">{config.labelText}</div>
+            <div class="right" />
+            <style innerHTML={ config.styles } />;
+        </div>
     );
 }

@@ -9,7 +9,7 @@ import { CLASS, BUTTON_NUMBER, BUTTON_LAYOUT, BUTTON_FLOW } from '../../constant
 import { determineEligibleFunding, isWalletFundingEligible } from '../../funding';
 import { ValidationError } from '../../lib';
 
-import { createAddDivideLogoAnimation } from './button-animations';
+import { createResizeButtonAnimation } from './button-animations';
 import { normalizeButtonProps, type ButtonPropsInputs, type OnShippingChange } from './props';
 import { Style } from './style';
 import { Button } from './button';
@@ -190,7 +190,7 @@ export function Buttons(props : ButtonsProps) : ElementNode {
             }
 
             <Script
-                buttonAnimation={ createAddDivideLogoAnimation() }
+                buttonAnimation={ createResizeButtonAnimation() }
                 nonce={ nonce }
             />
         </div>
