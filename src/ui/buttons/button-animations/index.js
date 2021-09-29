@@ -114,90 +114,120 @@ export const getDivideLogoAnimationLabelStyles = (enableDivideLogoAnimation) => 
 export const createResizeButtonAnimation = () => {
  
     const animation = (params) : void => {
-        const styles = params.cssClasses;
-        const animationContainerElement = document && document.querySelector(`.${ styles.CONTAINER }`);
-        const labelContainerElement = animationContainerElement && animationContainerElement.querySelector(`.${ styles.BUTTON_LABEL }`);
-        const labelAnimationElement = labelContainerElement && labelContainerElement.querySelector(`.${ styles.ANIMATION_LABEL_CONTAINER }`);
-        
-        const style = document.createElement('style');
-        labelAnimationElement.appendChild(style);
+        const { ANIMATION_CONTAINER, BUTTON_LABEL, ANIMATION_LABEL_CONTAINER } = params.cssClasses;
+        const animationContainerElement = document && document.querySelector(`.${ ANIMATION_CONTAINER }`);
+        const paypalLabelContainer = animationContainerElement && animationContainerElement.querySelector(`.${ BUTTON_LABEL }`);
+        const labelAnimationElement = paypalLabelContainer && paypalLabelContainer.querySelector(`.${ ANIMATION_LABEL_CONTAINER }`);
 
-        const keyFrameAnimations = `
-            @keyframes center-animate{
-                0%{
-                    background-color: rgb(246, 191, 66);
+        if (labelAnimationElement) {
+            const style = document.createElement('style');
+            labelAnimationElement.appendChild(style);
+            const buttonWidth = animationContainerElement.offsetWidth;
+            const buttonHeight = animationContainerElement.offsetHeight;
+            const rightElement = labelAnimationElement.querySelector('.right');
+            const labelTextElement =  labelAnimationElement.querySelector('.text');
+            const rightElementWidth = rightElement ? (rightElement.offsetWidth - 1) : 0;
+            let marginLabelContainer = document.defaultView.getComputedStyle(paypalLabelContainer).getPropertyValue('margin-left');
+            // eslint-disable-next-line radix
+            marginLabelContainer = marginLabelContainer ? parseInt(marginLabelContainer.replace('px', '')) : 0;
+            // eslint-disable-next-line radix
+            const animationDefaultXPosition = marginLabelContainer ? parseInt(buttonWidth - marginLabelContainer) : 0;
+            const animationDefaultYPosition = parseFloat(buttonHeight - 11);
+            const labelTextHeight = labelTextElement ? (buttonHeight - 34) : 0;
+
+            const keyFrameAnimations = `
+                .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }{
+                    height: ${ buttonHeight }px;
+                    transform: translate(${ animationDefaultXPosition }px,-${ animationDefaultYPosition }px);
                 }
-    
-                20%{
-                    background-color:rgb(237,185,63);
+
+                .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }  .right {
+                    transform: translateX(-${ rightElementWidth }px);
                 }
-    
-                40%{
-                    background-color: rgb(228,178,67);
+
+                .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }  .text {
+                    transform: translate(-150px,${ labelTextHeight }px);
                 }
-    
-                60%{
-                    background-color: rgb(193, 157, 79);
-                }
-    
-                80% {
-                    background-color: rgb(123, 110, 105);
-                }
-                100%{
-                    transform: scaleX(-218);
-                    background-color:rgb(27,49,138);
-                }
-            }
-    
-            @keyframes move-logo-to-left-side{
-                100%{
-                    transform: translateX(-110px);
-                }
-            }
-    
-            @keyframes left-animate{
-                100%{
-                    background-color:rgb(255, 196, 57);
-                    transform: translateX(-230px);
-                }
-            }
+
+                @keyframes center-animate{
+                    0%{
+                        background-color: rgb(246, 191, 66);
+                    }
         
-            @keyframes right-animate{
-                0%{
-                    background-color: rgb(246, 191, 66);
+                    20%{
+                        background-color:rgb(237,185,63);
+                    }
+        
+                    40%{
+                        background-color: rgb(228,178,67);
+                    }
+        
+                    60%{
+                        background-color: rgb(193, 157, 79);
+                    }
+        
+                    80% {
+                        background-color: rgb(123, 110, 105);
+                    }
+                    100%{
+                        transform: scaleX(-218);
+                        background-color:rgb(27,49,138);
+                    }
                 }
-    
-                20%{
-                    background-color:rgb(237,185,63);
+        
+                @keyframes move-logo-to-left-side{
+                    100%{
+                        transform: translateX(-110px);
+                    }
                 }
-    
-                40%{
-                    background-color: rgb(228,178,67);
+        
+                @keyframes left-animate{
+                    100%{
+                        background-color:rgb(255, 196, 57);
+                        transform: translateX(-230px);
+                    }
                 }
-    
-                60%{
-                    background-color: rgb(193, 157, 79);
+            
+                @keyframes right-animate{
+                    0%{
+                        background-color: rgb(246, 191, 66);
+                    }
+        
+                    20%{
+                        background-color:rgb(237,185,63);
+                    }
+        
+                    40%{
+                        background-color: rgb(228,178,67);
+                    }
+        
+                    60%{
+                        background-color: rgb(193, 157, 79);
+                    }
+        
+                    80% {
+                        background-color: rgb(123, 110, 105);
+                    }
+                    100%{
+                        background-color:rgb(27,49,138);
+                    }
                 }
-    
-                80% {
-                    background-color: rgb(123, 110, 105);
+        
+                @keyframes text-animate{
+                    100%{
+                        opacity: 1;
+                        color:white;
+                    }
                 }
-                100%{
-                    background-color:rgb(27,49,138);
-                }
-            }
-    
-            @keyframes text-animate{
-                100%{
-                    opacity: 1;
-                    color:white;
-                }
-            }
-        `;
-        style.type = 'text/css';
-        style.appendChild(document.createTextNode(keyFrameAnimations));
+            `;
+            style.type = 'text/css';
+            style.appendChild(document.createTextNode(keyFrameAnimations));
+        }
+
     };
+
     const { CONTAINER, LABEL_CONTAINER } = RESIZE_BUTTON_ANIMATION;
+
     return {
         'params': {
             large:      {
@@ -209,7 +239,7 @@ export const createResizeButtonAnimation = () => {
                 max: BUTTON_SIZE_STYLE.huge.maxWidth
             },
             cssClasses: {
-                CONTAINER,
+                ANIMATION_CONTAINER:       CONTAINER,
                 BUTTON_LABEL:              CLASS.BUTTON_LABEL,
                 ANIMATION_LABEL_CONTAINER: LABEL_CONTAINER
             }
@@ -227,10 +257,7 @@ export const resizePaypalButtonAnimatioStyles = (enableResizeButtonAnimation : b
 
     const styles = `
         .${ CONTAINER } .${ LABEL_CONTAINER } {
-            opacity: 1;
             position: relative;
-            height: 55px;
-            transform: translate(328px,-43.9px);
         }
 
         .${ CONTAINER } .${ LABEL_CONTAINER } .left,
@@ -262,10 +289,8 @@ export const resizePaypalButtonAnimatioStyles = (enableResizeButtonAnimation : b
         .${ CONTAINER } .${ LABEL_CONTAINER }  .text {
             opacity: 0;
             color: rgb(246, 191, 66);
-            transform: translate(-150px,18px);
             animation: text-animate 0.5s ease-in  forwards;
             z-index: 1000;
-            height: 24px;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             font-size: 16px;
         }
