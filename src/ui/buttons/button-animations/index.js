@@ -114,116 +114,136 @@ export const getDivideLogoAnimationLabelStyles = (enableDivideLogoAnimation) => 
 export const createResizeButtonAnimation = () => {
  
     const animation = (params) : void => {
+        let buttonSizesForAnimation = {};
+        const { large, huge  } = params;
         const { ANIMATION_CONTAINER, BUTTON_LABEL, ANIMATION_LABEL_CONTAINER } = params.cssClasses;
+
         const animationContainerElement = document && document.querySelector(`.${ ANIMATION_CONTAINER }`);
         const paypalLabelContainer = animationContainerElement && animationContainerElement.querySelector(`.${ BUTTON_LABEL }`);
         const labelAnimationElement = paypalLabelContainer && paypalLabelContainer.querySelector(`.${ ANIMATION_LABEL_CONTAINER }`);
+        console.log("large ranges",large);
+        console.log("huge ranges",huge);
 
-        if (labelAnimationElement) {
-            const style = document.createElement('style');
-            labelAnimationElement.appendChild(style);
-            const buttonWidth = animationContainerElement.offsetWidth;
-            const buttonHeight = animationContainerElement.offsetHeight;
-            const rightElement = labelAnimationElement.querySelector('.right');
-            const labelTextElement =  labelAnimationElement.querySelector('.text');
-            const rightElementWidth = rightElement ? (rightElement.offsetWidth - 1) : 0;
-            let marginLabelContainer = document.defaultView.getComputedStyle(paypalLabelContainer).getPropertyValue('margin-left');
-            // eslint-disable-next-line radix
-            marginLabelContainer = marginLabelContainer ? parseInt(marginLabelContainer.replace('px', '')) : 0;
-            // eslint-disable-next-line radix
-            const animationDefaultXPosition = marginLabelContainer ? parseInt(buttonWidth - marginLabelContainer) : 0;
-            const animationDefaultYPosition = parseFloat(buttonHeight - 11);
-            const labelTextHeight = labelTextElement ? (buttonHeight - 34) : 0;
+        const responsiveSizesForLargeButton = ({ marginLabelContainer, buttonWidth, buttonHeight, labelTextElement }) => {
+            return {
+                animationDefaultXPosition: marginLabelContainer ? parseInt(buttonWidth - marginLabelContainer, 10) : 0,
+                animationDefaultYPosition: parseFloat(buttonHeight - 11),
+                labelTextHeight:           labelTextElement ? (buttonHeight - 34) : 0,
+                backgroundWithLabel:       (buttonWidth * 62) / 100,
+                logoTranslateXSize:        ((buttonWidth * 38) / 100) - marginLabelContainer
+            };
+        };
 
-            const keyFrameAnimations = `
-                .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }{
-                    height: ${ buttonHeight }px;
-                    transform: translate(${ animationDefaultXPosition }px,-${ animationDefaultYPosition }px);
-                }
-
-                .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }  .right {
-                    transform: translateX(-${ rightElementWidth }px);
-                }
-
-                .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }  .text {
-                    transform: translate(-150px,${ labelTextHeight }px);
-                }
-
-                @keyframes center-animate{
-                    0%{
-                        background-color: rgb(246, 191, 66);
-                    }
-        
-                    20%{
-                        background-color:rgb(237,185,63);
-                    }
-        
-                    40%{
-                        background-color: rgb(228,178,67);
-                    }
-        
-                    60%{
-                        background-color: rgb(193, 157, 79);
-                    }
-        
-                    80% {
-                        background-color: rgb(123, 110, 105);
-                    }
-                    100%{
-                        transform: scaleX(-218);
-                        background-color:rgb(27,49,138);
-                    }
-                }
-        
-                @keyframes move-logo-to-left-side{
-                    100%{
-                        transform: translateX(-110px);
-                    }
-                }
-        
-                @keyframes left-animate{
-                    100%{
-                        background-color:rgb(255, 196, 57);
-                        transform: translateX(-230px);
-                    }
-                }
-            
-                @keyframes right-animate{
-                    0%{
-                        background-color: rgb(246, 191, 66);
-                    }
-        
-                    20%{
-                        background-color:rgb(237,185,63);
-                    }
-        
-                    40%{
-                        background-color: rgb(228,178,67);
-                    }
-        
-                    60%{
-                        background-color: rgb(193, 157, 79);
-                    }
-        
-                    80% {
-                        background-color: rgb(123, 110, 105);
-                    }
-                    100%{
-                        background-color:rgb(27,49,138);
-                    }
-                }
-        
-                @keyframes text-animate{
-                    100%{
-                        opacity: 1;
-                        color:white;
-                    }
-                }
-            `;
-            style.type = 'text/css';
-            style.appendChild(document.createTextNode(keyFrameAnimations));
+        if (!labelAnimationElement) {
+            return;
         }
 
+        const style = document.createElement('style');
+        labelAnimationElement.appendChild(style);
+        const buttonWidth = animationContainerElement.offsetWidth;
+        const buttonHeight = animationContainerElement.offsetHeight;
+        const rightElement = labelAnimationElement.querySelector('.right');
+        const labelTextElement =  labelAnimationElement.querySelector('.text');
+        const rightElementWidth = rightElement ? (rightElement.offsetWidth - 1) : 0;
+
+        let marginLabelContainer = document.defaultView.getComputedStyle(paypalLabelContainer).getPropertyValue('margin-left');
+        marginLabelContainer = marginLabelContainer ? parseInt(marginLabelContainer.replace('px', ''), 10) : 0;
+        
+
+        if (buttonWidth >= large.min && buttonWidth <= large.max) {
+            buttonSizesForAnimation = responsiveSizesForLargeButton({ marginLabelContainer, buttonWidth, buttonHeight, labelTextElement });
+        }
+
+        const { animationDefaultXPosition, animationDefaultYPosition, labelTextHeight, backgroundWithLabel, logoTranslateXSize } = buttonSizesForAnimation;
+       
+
+        const keyFrameAnimations = `
+            .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }{
+                height: ${ buttonHeight }px;
+                transform: translate(${ animationDefaultXPosition }px,-${ animationDefaultYPosition }px);
+            }
+
+            .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }  .right {
+                transform: translateX(-${ rightElementWidth }px);
+            }
+
+            .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }  .text {
+                transform: translate(-150px,${ labelTextHeight }px);
+            }
+
+            @keyframes center-animate{
+                0%{
+                    background-color: rgb(246, 191, 66);
+                }
+    
+                20%{
+                    background-color:rgb(237,185,63);
+                }
+    
+                40%{
+                    background-color: rgb(228,178,67);
+                }
+    
+                60%{
+                    background-color: rgb(193, 157, 79);
+                }
+    
+                80%{
+                    background-color: rgb(123, 110, 105);
+                }
+                100%{
+                    transform: scaleX(-${ backgroundWithLabel });
+                    background-color:rgb(27,49,138);
+                }
+            }
+    
+            @keyframes move-logo-to-left-side{
+                100%{
+                    transform: translateX(-${ logoTranslateXSize }px);
+                }
+            }
+    
+            @keyframes left-animate{
+                100%{
+                    background-color:rgb(255, 196, 57);
+                    transform: translateX(-${ backgroundWithLabel + 10 }px);
+                }
+            }
+        
+            @keyframes right-animate{
+                0%{
+                    background-color: rgb(246, 191, 66);
+                }
+    
+                20%{
+                    background-color:rgb(237,185,63);
+                }
+    
+                40%{
+                    background-color: rgb(228,178,67);
+                }
+    
+                60%{
+                    background-color: rgb(193, 157, 79);
+                }
+    
+                80% {
+                    background-color: rgb(123, 110, 105);
+                }
+                100%{
+                    background-color:rgb(27,49,138);
+                }
+            }
+    
+            @keyframes text-animate{
+                100%{
+                    opacity: 1;
+                    color:white;
+                }
+            }
+        `;
+        style.type = 'text/css';
+        style.appendChild(document.createTextNode(keyFrameAnimations));
     };
 
     const { CONTAINER, LABEL_CONTAINER } = RESIZE_BUTTON_ANIMATION;
@@ -311,7 +331,7 @@ export const resizePaypalButtonAnimatioStyles = (enableResizeButtonAnimation : b
     `;
 
     return {
-        labelText:  'Earn rewards',
+        labelText:  'Buy now Pay Later',
         labelClass:  LABEL_CONTAINER,
         styles
     };
