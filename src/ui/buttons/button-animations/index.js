@@ -125,12 +125,22 @@ export const createResizeButtonAnimation = () => {
         console.log("huge ranges",huge);
 
         const responsiveSizesForLargeButton = ({ marginLabelContainer, buttonWidth, buttonHeight, labelTextElement }) => {
+            let backgroundLabelPercent = 62;
+            let logoPercent = 38;
+            const labelTextPercent = 50;
+            const labelContainerWidth = paypalLabelContainer.offsetWidth;
+
+            if (buttonWidth >= 330 &&  buttonWidth <= 400) {
+                logoPercent = 40;
+                backgroundLabelPercent = 70;
+            }
             return {
                 animationDefaultXPosition: marginLabelContainer ? parseInt(buttonWidth - marginLabelContainer, 10) : 0,
                 animationDefaultYPosition: parseFloat(buttonHeight - 11),
                 labelTextHeight:           labelTextElement ? (buttonHeight - 34) : 0,
-                backgroundWithLabel:       (buttonWidth * 62) / 100,
-                logoTranslateXSize:        ((buttonWidth * 38) / 100) - marginLabelContainer
+                backgroundWithLabel:       (buttonWidth * backgroundLabelPercent) / 100,
+                logoTranslateXSize:        ((buttonWidth * logoPercent) / 100) - marginLabelContainer,
+                textTranslateXsize:         ((labelContainerWidth * labelTextPercent) / 100) + (marginLabelContainer * 2)
             };
         };
 
@@ -154,9 +164,9 @@ export const createResizeButtonAnimation = () => {
             buttonSizesForAnimation = responsiveSizesForLargeButton({ marginLabelContainer, buttonWidth, buttonHeight, labelTextElement });
         }
 
-        const { animationDefaultXPosition, animationDefaultYPosition, labelTextHeight, backgroundWithLabel, logoTranslateXSize } = buttonSizesForAnimation;
+        const { animationDefaultXPosition, animationDefaultYPosition, labelTextHeight, backgroundWithLabel, logoTranslateXSize, textTranslateXsize } = buttonSizesForAnimation;
        
-
+        
         const keyFrameAnimations = `
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }{
                 height: ${ buttonHeight }px;
@@ -168,7 +178,7 @@ export const createResizeButtonAnimation = () => {
             }
 
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }  .text {
-                transform: translate(-150px,${ labelTextHeight }px);
+                transform: translate(-${ textTranslateXsize }px,${ labelTextHeight }px);
             }
 
             @keyframes center-animate{
@@ -238,7 +248,7 @@ export const createResizeButtonAnimation = () => {
             @keyframes text-animate{
                 100%{
                     opacity: 1;
-                    color:white;
+                    color: white;
                 }
             }
         `;
