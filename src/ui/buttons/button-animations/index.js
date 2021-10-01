@@ -121,18 +121,20 @@ export const createResizeButtonAnimation = () => {
         const animationContainerElement = document && document.querySelector(`.${ ANIMATION_CONTAINER }`);
         const paypalLabelContainer = animationContainerElement && animationContainerElement.querySelector(`.${ BUTTON_LABEL }`);
         const labelAnimationElement = paypalLabelContainer && paypalLabelContainer.querySelector(`.${ ANIMATION_LABEL_CONTAINER }`);
-        console.log("large ranges",large);
-        console.log("huge ranges",huge);
 
         const responsiveSizesForLargeButton = ({ marginLabelContainer, buttonWidth, buttonHeight, labelTextElement }) => {
-            let backgroundLabelPercent = 62;
-            let logoPercent = 38;
+            let backgroundLabelPercent = 66;
+            let logoPercent = 35;
             const labelTextPercent = 50;
             const labelContainerWidth = paypalLabelContainer.offsetWidth;
+            let labelTextSpace = 0;
 
-            if (buttonWidth >= 330 &&  buttonWidth <= 400) {
-                logoPercent = 40;
+            if (buttonWidth >= 330 &&  buttonWidth <= 500) {
+                logoPercent = 38;
                 backgroundLabelPercent = 70;
+            }
+            if (buttonWidth >= 400 &&  buttonWidth <= 500) {
+                labelTextSpace = 14;
             }
             return {
                 animationDefaultXPosition: marginLabelContainer ? parseInt(buttonWidth - marginLabelContainer, 10) : 0,
@@ -140,16 +142,14 @@ export const createResizeButtonAnimation = () => {
                 labelTextHeight:           labelTextElement ? (buttonHeight - 34) : 0,
                 backgroundWithLabel:       (buttonWidth * backgroundLabelPercent) / 100,
                 logoTranslateXSize:        ((buttonWidth * logoPercent) / 100) - marginLabelContainer,
-                textTranslateXsize:         ((labelContainerWidth * labelTextPercent) / 100) + (marginLabelContainer * 2)
+                textTranslateXsize:         ((labelContainerWidth * labelTextPercent) / 100) + (marginLabelContainer * 2) - labelTextSpace
             };
         };
 
         if (!labelAnimationElement) {
             return;
         }
-
-        const style = document.createElement('style');
-        labelAnimationElement.appendChild(style);
+        
         const buttonWidth = animationContainerElement.offsetWidth;
         const buttonHeight = animationContainerElement.offsetHeight;
         const rightElement = labelAnimationElement.querySelector('.right');
@@ -162,10 +162,11 @@ export const createResizeButtonAnimation = () => {
 
         if (buttonWidth >= large.min && buttonWidth <= large.max) {
             buttonSizesForAnimation = responsiveSizesForLargeButton({ marginLabelContainer, buttonWidth, buttonHeight, labelTextElement });
+        } else {
+            return;
         }
 
         const { animationDefaultXPosition, animationDefaultYPosition, labelTextHeight, backgroundWithLabel, logoTranslateXSize, textTranslateXsize } = buttonSizesForAnimation;
-       
         
         const keyFrameAnimations = `
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }{
@@ -252,6 +253,9 @@ export const createResizeButtonAnimation = () => {
                 }
             }
         `;
+
+        const style = document.createElement('style');
+        labelAnimationElement.appendChild(style);
         style.type = 'text/css';
         style.appendChild(document.createTextNode(keyFrameAnimations));
     };
