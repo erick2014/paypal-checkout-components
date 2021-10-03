@@ -2,7 +2,7 @@
 /** @jsx node */
 import { node, Fragment, ChildType } from 'jsx-pragmatic/src';
 
-import { getDivideLogoAnimationLabelStyles, resizePaypalButtonAnimatioStyles } from './index';
+import { getDivideLogoAnimationLabelStyles, resizePaypalButtonAnimationConfig } from './index';
 
 export type LabelOptions = {|
     enableDivideLogoAnimation : ?boolean,
@@ -24,18 +24,16 @@ export function LabelForDivideLogoAnimation({ enableDivideLogoAnimation } : Labe
 }
 
 export function LabelForResizePaypalButtonAnimation({ enableResizePaypalButtonAnimation } : LabelOptions) : ChildType {
-    const config = resizePaypalButtonAnimatioStyles(enableResizePaypalButtonAnimation);
+    const config = resizePaypalButtonAnimationConfig(enableResizePaypalButtonAnimation);
     if (!config) {
         return;
     }
 
     return (
-        <div class={ config.labelClass }>
-            <div class="left" />
-            <div class="center" />
-            <div class="text">{config.labelText}</div>
-            <div class="right" />
-            <style innerHTML={ config.styles } />;
-        </div>
+        <Fragment>
+            <div class={ `${ config.labelClass } left` } />
+            <div class={ `${ config.labelClass } text` }>{config.labelText}</div>
+            <div class={ `${ config.labelClass } right` } />
+        </Fragment>
     );
 }
