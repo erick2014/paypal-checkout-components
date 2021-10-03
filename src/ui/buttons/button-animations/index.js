@@ -116,30 +116,31 @@ export const createResizeButtonAnimation = () => {
     const animation = (params) : void => {
         let buttonSizesForAnimation = {};
         const { large, huge  } = params;
-        const { ANIMATION_CONTAINER, BUTTON_LABEL, ANIMATION_LABEL_CONTAINER, LOGO_CLASS } = params.cssClasses;
+        const { ANIMATION_CONTAINER, BUTTON_LABEL, ANIMATION_LABEL_CONTAINER, LOGO_CLASS_LOGO } = params.cssClasses;
 
         const animationContainerElement = document && document.querySelector(`.${ ANIMATION_CONTAINER }`);
         const paypalLabelContainer = animationContainerElement && animationContainerElement.querySelector(`.${ BUTTON_LABEL }`);
         const labelAnimationElement = paypalLabelContainer && paypalLabelContainer.querySelector(`.${ ANIMATION_LABEL_CONTAINER }`);
+
+        if (!animationContainerElement || !labelAnimationElement) {
+            return;
+        }
+
         let marginLabelContainer = document.defaultView.getComputedStyle(paypalLabelContainer).getPropertyValue('margin-left');
         marginLabelContainer = marginLabelContainer ? parseInt(marginLabelContainer.replace('px', ''), 10) : 0;
         const buttonHeight = animationContainerElement.offsetHeight;
-        /* if (buttonWidth >= large.min && buttonWidth <= large.max) {
-            buttonSizesForAnimation = responsiveSizesForLargeButton({ marginLabelContainer, buttonWidth, buttonHeight, labelTextElement });
-        } else {
-            return;
-        }
-        
-        const { animationDefaultXPosition, animationDefaultYPosition, labelTextHeight, backgroundWithLabel, logoTranslateXSize, textTranslateXsize } = buttonSizesForAnimation; */
+       
         const mainContainerWidth = animationContainerElement.offsetWidth;
-        const leftSiseWidth = mainContainerWidth + (marginLabelContainer * 2) + 4; 
+        const leftSiseWidth = mainContainerWidth + (marginLabelContainer * 2) + 4;
         const logoWidthSize = ((mainContainerWidth * 30) / 100) + marginLabelContainer;
+        const logoFinialPositionX = logoWidthSize + (marginLabelContainer * 2);
+        const textInitialXposition = (mainContainerWidth / 2) - marginLabelContainer;
 
         const keyFrameAnimations = `
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.right,
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.left,
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.text,
-            .${ ANIMATION_CONTAINER } .${ BUTTON_LABEL }  img.${ LOGO_CLASS } {
+            .${ ANIMATION_CONTAINER } .${ BUTTON_LABEL }  img.${ LOGO_CLASS_LOGO } {
                 position: absolute;
             }
 
@@ -158,6 +159,7 @@ export const createResizeButtonAnimation = () => {
                 transform: translate(-15px, -12px);
                 z-index: 9;
                 animation: 1s left-animate 1s ease-in-out forwards;
+                border-radius: 0 15px 15px 0;
             }
 
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.text {
@@ -166,11 +168,11 @@ export const createResizeButtonAnimation = () => {
                 z-index: 9;
                 font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
                 font-size: 16px;
-                transform: translateX(100%);
+                transform: translateX(${ textInitialXposition }px);
                 animation: 1s text-animate 1s ease-in-out forwards;
             }
 
-            .${ ANIMATION_CONTAINER } .${ BUTTON_LABEL } img.${ LOGO_CLASS } {
+            .${ ANIMATION_CONTAINER } .${ BUTTON_LABEL } img.${ LOGO_CLASS_LOGO } {
                 transform: translateX(-50%);
                 z-index: 10;
                 animation: 1s  move-logo-to-left-side 1s ease-in-out forwards;
@@ -178,7 +180,7 @@ export const createResizeButtonAnimation = () => {
 
             @keyframes move-logo-to-left-side{
                 100%{
-                    transform: translateX(-160px);
+                    transform: translateX(-${ logoFinialPositionX }px);
                 }
             }
     
@@ -213,7 +215,6 @@ export const createResizeButtonAnimation = () => {
                 }
             }
         `;
-        console.log("keyFrameAnimations ",keyFrameAnimations)
         const style = document.createElement('style');
         paypalLabelContainer.appendChild(style);
         style.type = 'text/css';
@@ -236,7 +237,7 @@ export const createResizeButtonAnimation = () => {
                 ANIMATION_CONTAINER:       CONTAINER,
                 BUTTON_LABEL:              CLASS.BUTTON_LABEL,
                 ANIMATION_LABEL_CONTAINER: LABEL_CONTAINER,
-                LOGO_CLASS:                 LOGO_CLASS.LOGO
+                LOGO_CLASS_LOGO:                 LOGO_CLASS.LOGO
             }
         },
         'fn': animation
