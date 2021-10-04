@@ -114,7 +114,6 @@ export const getDivideLogoAnimationLabelStyles = (enableDivideLogoAnimation) => 
 export const createResizeButtonAnimation = () => {
  
     const animation = (params) : void => {
-        let buttonSizesForAnimation = {};
         const { large, huge  } = params;
         const { ANIMATION_CONTAINER, BUTTON_LABEL, ANIMATION_LABEL_CONTAINER, LOGO_CLASS_LOGO } = params.cssClasses;
 
@@ -126,20 +125,18 @@ export const createResizeButtonAnimation = () => {
             return;
         }
 
-        let marginLabelContainer = document.defaultView.getComputedStyle(paypalLabelContainer).getPropertyValue('margin-left');
-        marginLabelContainer = marginLabelContainer ? parseInt(marginLabelContainer.replace('px', ''), 10) : 0;
+        const logoElement = paypalLabelContainer.querySelector(`.${ LOGO_CLASS_LOGO }`);
+        const leftElent = animationContainerElement.querySelector('.left');
+        const leftStartPositionX =  parseInt(leftElent.getBoundingClientRect().left, 10);
+        const rightElement = paypalLabelContainer.querySelector('.right');
+        const rightStartPositionX =  parseInt(rightElement.getBoundingClientRect().left, 10);
         const buttonHeight = animationContainerElement.offsetHeight;
         const buttonWidth = animationContainerElement.offsetWidth;
-       
         const mainContainerWidth = animationContainerElement.offsetWidth;
-        const leftSiseWidth = mainContainerWidth + (marginLabelContainer * 2) + 4;
-        
-        const logoContainerWidthSize = ((mainContainerWidth * 30) / 100) + marginLabelContainer;
-        let logoTranslateXposition = logoContainerWidthSize + (marginLabelContainer * 2);
-        
-        if (buttonWidth >= 300) {
-            logoTranslateXposition = (mainContainerWidth / 2) - marginLabelContainer;
-        }
+        const leftSiseWidth = mainContainerWidth;
+        const logoContainerWidthSize = ((mainContainerWidth * 35) / 100);
+        const logoSizeRemaining = (logoContainerWidthSize - logoElement.offsetWidth) / 2;
+        const logoTranslateXSize = (buttonWidth / 2) - logoSizeRemaining;
 
         const keyFrameAnimations = `
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.right,
@@ -151,9 +148,9 @@ export const createResizeButtonAnimation = () => {
 
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.right {
                 height: ${ buttonHeight }px;
-                width: ${ leftSiseWidth }px;
+                width: ${ buttonWidth }px;
                 background: rgb(27,49,138);
-                transform: translate(-15px, -12px);
+                transform: translate(-${ rightStartPositionX }px, -12px);
                 z-index: 8;
                 border-radius: 8px 0 0px 8px;
             }
@@ -161,11 +158,11 @@ export const createResizeButtonAnimation = () => {
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.left {
                 height: ${ buttonHeight }px;
                 background: rgb(255, 196, 57);
-                width: ${ leftSiseWidth }px;
-                transform: translate(-15px, -12px);
+                width: ${ buttonWidth }px;
+                transform: translate(-${ leftStartPositionX }px, -12px);
                 z-index: 9;
                 animation: 1s left-animate 1s ease-in-out forwards;
-                border-radius: 0 15px 15px 0;
+                border-radius: 3px;
             }
 
             .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER }.text {
@@ -188,7 +185,7 @@ export const createResizeButtonAnimation = () => {
 
             @keyframes move-logo-to-left-side{
                 100%{
-                    transform: translateX(-${ logoTranslateXposition }px);
+                    transform: translateX(-${ logoTranslateXSize }px);
                 }
             }
     
@@ -196,11 +193,19 @@ export const createResizeButtonAnimation = () => {
                 0%{
                     background: rgb(255, 196, 57);
                     width: ${ leftSiseWidth }px;
+                    border-radius: 3px;
+                }
+
+                10%{
+                    background: rgb(255, 196, 57);
+                    width: ${ leftSiseWidth }px;
+                    border-radius: 0 15px 15px 0;
                 }
                
                 100%{
                     background-color:rgb(255, 196, 57);
                     width: ${ logoContainerWidthSize }px;
+                    border-radius: 0 15px 15px 0;
                 }
             }
 
