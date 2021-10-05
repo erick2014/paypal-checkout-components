@@ -31,9 +31,9 @@ export function LabelForResizePaypalButtonAnimation({ enableResizePaypalButtonAn
 
     return (
         <Fragment>
-            <div class={ `${ config.labelClass } left` } />
-            <div class={ `${ config.labelClass } text` }>{config.labelText}</div>
-            <div class={ `${ config.labelClass } right` } />
+            <div class={ `${ config.labelClass }-left` } />
+            <div class={ `${ config.labelClass }-text` }>{config.labelText}</div>
+            <div class={ `${ config.labelClass }-right` } />
         </Fragment>
     );
 }
