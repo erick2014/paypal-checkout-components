@@ -131,9 +131,9 @@ export const createResizeButtonAnimation = () => {
 
             const paypalLabelContainer = animationContainerElement && animationContainerElement.querySelector(`.${ BUTTON_LABEL }`);
             const logoElement = paypalLabelContainer.querySelector(`.${ LOGO_CLASS_LOGO }`);
-            const leftElement = animationContainerElement.querySelector(`${ ANIMATION_CONTAINER }-left`);
+            const leftElement = animationContainerElement.querySelector(`.${ ANIMATION_CONTAINER }-left`);
             const leftStartPositionX =  leftElement ? parseInt(leftElement.getBoundingClientRect().left, 10) : 0;
-            const rightElement = paypalLabelContainer.querySelector(`${ ANIMATION_CONTAINER }-right`);
+            const rightElement = paypalLabelContainer.querySelector(`.${ ANIMATION_CONTAINER }-right`);
             const rightStartPositionX = rightElement ? parseInt(rightElement.getBoundingClientRect().left, 10) : 0;
             const buttonHeight = animationContainerElement.offsetHeight;
             const mainContainerWidth = animationContainerElement.offsetWidth;
@@ -142,6 +142,7 @@ export const createResizeButtonAnimation = () => {
             const logoSizeRemaining = (logoContainerWidthSize - logoElement.offsetWidth) / 2;
             const logoTranslateXSize = (buttonWidth / 2) - logoSizeRemaining;
             const paypalLabelContainerTopPosition = (paypalLabelContainer && paypalLabelContainer.getBoundingClientRect().top) || 0;
+            const transLateYposition = paypalLabelContainerTopPosition ? Math.round(paypalLabelContainerTopPosition) : 0;
             
             const keyFrameAnimations = `
                 .${ ANIMATION_CONTAINER } .${ ANIMATION_CONTAINER }-right,
@@ -155,7 +156,7 @@ export const createResizeButtonAnimation = () => {
                     height: ${ buttonHeight }px;
                     width: ${ buttonWidth }px;
                     background: rgb(27,49,138);
-                    transform: translate(-${ rightStartPositionX }px, -${ Math.round(paypalLabelContainerTopPosition)  }px);
+                    transform: translate(-${ rightStartPositionX }px, -${ transLateYposition  }px);
                     z-index: 8;
                     border-radius: 8px 0 0px 8px;
                 }
@@ -164,7 +165,7 @@ export const createResizeButtonAnimation = () => {
                     height: ${ buttonHeight }px;
                     background: rgb(255, 196, 57);
                     width: ${ buttonWidth }px;
-                    transform: translate(-${ leftStartPositionX }px, -${ Math.round(paypalLabelContainerTopPosition) }px);
+                    transform: translate(-${ leftStartPositionX }px, -${ transLateYposition }px);
                     z-index: 9;
                     animation: 1s left-animate 1s ease-in-out forwards;
                     border-radius: 3px;
