@@ -126,6 +126,18 @@ export const createResizeButtonAnimation = () => {
             const buttonWidth = animationContainerElement.offsetWidth;
 
             if (buttonWidth < large.min || buttonWidth > huge.max) {
+                let animationElement = animationContainerElement.querySelector(`.${ ANIMATION_CONTAINER }-left`);
+                if (animationElement) {
+                    animationElement.remove();
+                }
+                animationElement = animationContainerElement.querySelector(`.${ ANIMATION_CONTAINER }-right`);
+                if (animationElement) {
+                    animationElement.remove();
+                }
+                animationElement = animationContainerElement.querySelector(`.${ ANIMATION_CONTAINER }-text`);
+                if (animationElement) {
+                    animationElement.remove();
+                }
                 return;
             }
 
@@ -239,7 +251,9 @@ export const createResizeButtonAnimation = () => {
             style.type = 'text/css';
             style.appendChild(document.createTextNode(keyFrameAnimations));
         // eslint-disable-next-line no-empty
-        } catch (error) { }
+        } catch (error) {
+            console.log("error ",error)
+         }
     };
 
     const { CONTAINER, LABEL_CONTAINER } = RESIZE_BUTTON_ANIMATION;
