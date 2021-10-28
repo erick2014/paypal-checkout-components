@@ -75,8 +75,6 @@ const getPositionsOfElementsForAnimation = function(document, configuration) : a
 
 function animationConfiguration () : ButtonSizes {
     return {
-        // large:      { min: BUTTON_SIZE_STYLE.large.minWidth },
-        // huge:       { max: BUTTON_SIZE_STYLE.huge.maxWidth },
         cssClasses: {
             DOM_READY:                  CLASS.DOM_READY,
             ANIMATION_CONTAINER:        ANIMATION.CONTAINER,
@@ -91,17 +89,36 @@ export function createAnimation() : Function {
     return (params, cssClasses) : void => {
         const { initialTranslateXTextPosition, paypalLabelContainerElement, logoTranslateXPosition } = params;
         const { ANIMATION_LABEL_ELEMENT, ANIMATION_CONTAINER, PAYPAL_LOGO } = cssClasses;
+        
         const animations = `
             .${ ANIMATION_CONTAINER }:hover img.${ PAYPAL_LOGO } {
                 animation: move-logo-to-left 0.3s linear both;
+                transform: translateX(0);
+            }
+
+            .fadeout-logo-and-show-label-animation img.paypal-logo {
+                animation: move-logo-to-right 2s cubic-bezier(0.42, 0, 0.27, 0.95);
             }
             
             .${ ANIMATION_CONTAINER }:hover .${ ANIMATION_LABEL_ELEMENT } {
                 animation: fadein-label-text 2s linear both;
             }
+
+            @keyframes move-logo-to-right {
+                0%{
+                    opacity: 0;
+                    visibility: hidden;
+                    transform: translateX(${ logoTranslateXPosition ? logoTranslateXPosition / 2 : 0 });
+                }
+                100%{
+                    visibility: visible;
+                    opacity: 1;
+                    transform: translateX(0px)
+                }
+            }
+
             @keyframes move-logo-to-left {
                 100%{
-                    opacity: 0;
                     visibility: hidden;
                     opacity:0;
                     transition: visibility 0s 0, opacity 0.1s linear;
