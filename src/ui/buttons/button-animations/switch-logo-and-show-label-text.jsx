@@ -89,19 +89,20 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
     const { paypalLabelContainerElement, paypalLogoStartingLeftPosition, labelFontSize } = animationProps;
     const animations = `
         .${ DOM_READY } .${ ANIMATION_CONTAINER } img.${ PAYPAL_LOGO }-paypal{
-            animation: 3s move-logo-to-left-side 1s infinite alternate;
+            animation: 4s move-logo-to-left-side 1s infinite alternate;
             position:fixed;
+            left: ${ paypalLogoStartingLeftPosition }%;
         }
         
         .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER } {
-            animation: 3s divide-logo-animation-right-side 1s infinite alternate;
+            animation: 4s divide-logo-animation-right-side 1s infinite alternate;
             text-align: center;
             width: 100%;
             font-size: ${ labelFontSize }px;
         }
 
         .${ DOM_READY } .${ ANIMATION.CONTAINER } img.${ LOGO_CLASS.LOGO }-pp{
-            animation: 3s move-small-paypal 1s infinite alternate;
+            animation: 4s move-small-paypal 1s infinite alternate;
             left:7%;
             opacity:0;
         }
@@ -109,28 +110,29 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
         @keyframes move-logo-to-left-side {
             0%,33% {
                 left: ${ paypalLogoStartingLeftPosition }%;
+                opacity:1;
             }
-            90%,100% {
-                left: 0%;
+            50%,100% {
+                left: 20%;
                 opacity:0;
             }
         }
         
         @keyframes move-small-paypal {
-            0%,33%,66% {
+            0%,33%{
                 opacity:0;
             }
-            90%,100% {
+            51%,100% {
                 left: 7%;
                 opacity:1;
             }
         }
         
         @keyframes divide-logo-animation-right-side {
-            0%,33%,66%{
+            0%,33%{
                 opacity: 0;
             }
-            90%, 100% {
+            51%, 100% {
                 opacity: 1;                    
             }
         }
