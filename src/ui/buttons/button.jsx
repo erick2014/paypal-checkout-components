@@ -134,7 +134,7 @@ export function Button({ fundingSource, style, multiple, locale, env, fundingEli
 
     // Only apply animation to the paypal button
     const buttonAnimation = fundingSource === FUNDING.PAYPAL
-        ? getButtonAnimation(personalization)
+        ? getButtonAnimation(personalization, logoColor)
         : {};
 
     const {

@@ -38,7 +38,8 @@ export type ButtonAnimation = {|
 |};
 
 export type LabelOptions = {|
-    animationLabelText : string
+    animationLabelText : string,
+    logoColor? : ?string
 |};
 
 export type DivideLogoAnimationProps = {|
