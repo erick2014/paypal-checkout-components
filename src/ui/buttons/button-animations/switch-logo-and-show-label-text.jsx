@@ -21,10 +21,10 @@ export function AnimationComponent({ animationLabelText, logoColor } : LabelOpti
         experimentName: 'Varied_Button_Design'
     };
     return (
-        <Fragment>
+        <div class={ config.labelClass } data-animation-experiment={ config.experimentName }>
             <PPLogo logoColor={ logoColor } />
-            <div class={ config.labelClass } data-animation-experiment={ config.experimentName }> <span>{config.labelText}</span></div>
-        </Fragment>
+            <span>{config.labelText}</span>
+        </div>
     );
 }
 
@@ -69,12 +69,12 @@ const getAnimationProps = function(document, configuration) : AnimationProps | n
 const createAnimation = function (animationProps, cssClasses) : void | null {
     const { ANIMATION_LABEL_CONTAINER, ANIMATION_CONTAINER, DOM_READY, PAYPAL_LOGO } = cssClasses;
     const { paypalLabelContainerElement, paypalLogoStartingLeftPosition, labelFontSize } = animationProps;
-    const logoStartingPosition = parseInt(paypalLogoStartingLeftPosition, 10) + 3;
+    const logoStartingPosition = parseInt(paypalLogoStartingLeftPosition, 10) + 4;
     const animations = `
         .${ DOM_READY } .${ ANIMATION_CONTAINER } img.${ PAYPAL_LOGO }-paypal{
-            animation: 4s move-logo-to-left-side 1s infinite alternate;
+            animation: 4s move-logo-to-left-side 0.5s infinite alternate;
             position:fixed;
-            left: ${ logoStartingPosition }%;
+            transform:translateX(-50%);
         }
 
         .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER } {
@@ -82,7 +82,7 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
             opacity: 0; 
             color: #142C8E;
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            animation: 4s divide-logo-animation-right-side 1s infinite alternate;
+            animation: 4s divide-logo-animation-right-side 0.5s infinite alternate;
             text-align: center;
             width: 100%;
             font-size: ${ labelFontSize }px;
@@ -90,19 +90,20 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
         }
 
         .${ DOM_READY } .${ ANIMATION.CONTAINER } img.${ LOGO_CLASS.LOGO }-pp{
-            position: fixed;
-            animation: 4s move-small-paypal 1s infinite alternate;
-            left:7%;
+            position: relative;
+            animation: 4s move-small-paypal 0.5s infinite alternate;
             opacity:0;
+            padding-right: 2px;
         }
 
         @keyframes move-logo-to-left-side {
             0%,33% {
-                left: ${ logoStartingPosition }%;
+                transform:translateX(-50%);
                 opacity:1;
             }
             50%,100% {
-                left: 20%;
+                position:fixed;
+                transform:translateX(-94%);
                 opacity:0;
             }
         }
@@ -112,7 +113,6 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
                 opacity:0;
             }
             51%,100% {
-                left: 7%;
                 opacity:1;
             }
         }
