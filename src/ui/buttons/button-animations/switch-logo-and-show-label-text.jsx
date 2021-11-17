@@ -92,7 +92,7 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
 
         .${ DOM_READY } .${ ANIMATION.CONTAINER } img.${ LOGO_CLASS.LOGO }-pp{
             animation: 4s move-small-paypal 0.5s infinite alternate;
-            padding-right: 4px;
+            padding-right: 6px;
         }
 
         @keyframes move-logo-to-left-side {
