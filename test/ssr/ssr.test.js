@@ -75,6 +75,23 @@ test(`Button should render with ssr, with zh_Hant locale option`, async () => {
     }
 });
 
+test(`Button should render with ssr, with en_HK locale option`, async () => {
+
+    const { Buttons } = await getButtonScript();
+
+    const buttonHTML = Buttons({
+        locale:          { country: 'HK', lang: 'en' },
+        platform:        'desktop',
+        sessionID:       'xyz',
+        buttonSessionID: 'abc',
+        fundingEligibility
+    }).render(html());
+
+    if (!buttonHTML || typeof buttonHTML !== 'string') {
+        throw new Error(`Expected html to be a non-empty string`);
+    }
+});
+
 test(`Button should fail to render with ssr, with invalid style option`, async () => {
 
     const { Buttons } = await getButtonScript();
@@ -318,5 +335,34 @@ test(`Animation should not be applied when there is invalid animation id`, async
         throw new Error('Expected animation to applied in script and container');
     }
 
+    
+});
+
+test(`Animation should not be applied when buttonAnimation is null`, async () => {
+
+    const { Buttons } = await getButtonScript();
+
+    const personalization = {
+        buttonAnimation: null
+    };
+
+    const buttonHTML = Buttons({
+        locale:          { country: 'US', lang: 'en' },
+        platform:        'desktop',
+        sessionID:       'xyz',
+        buttonSessionID: 'abc',
+        personalization,
+        fundingEligibility
+    }).render(html());
+
+    if (!buttonHTML || typeof buttonHTML !== 'string') {
+        throw new Error(`Expected html to be a non-empty string`);
+    }
+
+    const animationSignal = buttonHTML.match('data-animation-experiment');
+
+    if (animationSignal) {
+        throw new Error('Expected animation to applied in script and container');
+    }
     
 });

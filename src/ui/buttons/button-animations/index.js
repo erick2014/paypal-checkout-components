@@ -20,9 +20,15 @@ function setupAnimation(animationId : string, animationLabelText : string, logoC
     return (animationIds[animationId] && animationIds[animationId](animationLabelText, logoColor));
 }
 
-export function getButtonAnimation(personalization : ?Personalization, logoColor: string) : ButtonAnimationOutputParams | Object {
-    // Only show animations for SSR
-    if (__WEB__ || !personalization) {
+export function getButtonAnimation(personalization : ?Personalization) : ButtonAnimationOutputParams | Object {
+
+    // check valid personalization
+    if (
+        __WEB__
+        || !personalization
+        || typeof personalization !== 'object'
+        || !personalization.buttonAnimation
+    )  {
         return {};
     }
     const {
