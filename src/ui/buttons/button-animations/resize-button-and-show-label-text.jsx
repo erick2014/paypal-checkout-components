@@ -70,17 +70,23 @@ const getAnimationProps = function(document, configuration) : AnimationProps | n
         labelFontSize = 11;
     }
 
+    const buttonHeight = animationContainer.offsetHeight;
     // get the label container that animation will be applied to
-    const paypalLabelContainerElement = animationContainer.querySelector(`.${ PAYPAL_BUTTON_LABEL }`) || null;
+    const paypalLabelContainer = animationContainer.querySelector(`.${ PAYPAL_BUTTON_LABEL }`) || null;
+    const labelStylesObject = (paypalLabelContainer && (paypalLabelContainer.currentStyle || window.getComputedStyle(paypalLabelContainer))) || null;
+    const marginLabelContainer = (labelStylesObject && labelStylesObject.marginRight) || null;
     return {
         labelFontSize,
-        paypalLabelContainerElement
+        paypalLabelContainerElement: paypalLabelContainer,
+        marginLabelContainer,
+        buttonHeight
     };
 };
 
 const createAnimation = function (animationProps, cssClasses) : void | null {
     const { ANIMATION_LABEL_CONTAINER, ANIMATION_CONTAINER, DOM_READY, PAYPAL_LOGO } = cssClasses;
-    const { paypalLabelContainerElement, labelFontSize } = animationProps;
+    const { buttonHeight, paypalLabelContainerElement, labelFontSize, marginLabelContainer } = animationProps;
+    const blueLayerPosition = Math.round(parseFloat(marginLabelContainer));
     const animations = `
         .${ DOM_READY } .${ ANIMATION_CONTAINER } img.${ PAYPAL_LOGO }-paypal{
             animation: 4s move-logo-to-left-side 0.5s infinite alternate;
@@ -90,12 +96,12 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
 
         .${ ANIMATION.CONTAINER } .blue-layer {
             width: 1%;
-            height: 25px;
+            height: ${ buttonHeight }px;
             background-color: rgb(43,114,235);
             position: fixed;
-            top: -6px;
-            right: -6px;
-            border-radius: 10px 4px 4px 10px;
+            transform: translateY(-25%);
+            right: -${ blueLayerPosition }px;
+            border-radius: 9px 3px 3px 9px;
             animation: 4s resize-blue-layer 0.5s infinite alternate;
         }
 
