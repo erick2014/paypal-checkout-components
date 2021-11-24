@@ -89,7 +89,7 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
     const blueLayerPosition = Math.round(parseFloat(marginLabelContainer));
     const animations = `
         .${ DOM_READY } .${ ANIMATION_CONTAINER } img.${ PAYPAL_LOGO }-paypal{
-            animation: 4s move-logo-to-left-side 0.5s infinite alternate;
+            animation: 4s move-logo-to-left-side 1s infinite alternate;
             position:fixed;
             transform:translateX(-50%);
         }
@@ -102,12 +102,12 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
             transform: translateY(-25%);
             right: -${ blueLayerPosition }px;
             border-radius: 9px 3px 3px 9px;
-            animation: 4s resize-blue-layer 0.5s infinite alternate;
+            animation: 4s resize-blue-layer 1s infinite alternate;
         }
 
         .${ ANIMATION_CONTAINER } .${ ANIMATION_LABEL_CONTAINER } {
             position: fixed;
-            animation: 4s show-text 0.5s infinite alternate;
+            animation: 4s show-text 1s infinite alternate;
             font-size: ${ labelFontSize }px;
             padding-top: 1px;
             padding-right: 3%;
@@ -115,7 +115,7 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
         }
 
         .${ DOM_READY } .${ ANIMATION.CONTAINER } img.${ LOGO_CLASS.LOGO }-pp{
-            animation: 4s move-small-paypal 0.5s infinite alternate;
+            animation: 4s move-small-paypal 1s infinite alternate;
             left:0px;
             opacity:0;
         }
