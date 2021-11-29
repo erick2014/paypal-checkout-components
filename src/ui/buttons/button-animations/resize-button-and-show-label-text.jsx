@@ -69,8 +69,12 @@ const getAnimationProps = function(document, configuration) : AnimationProps | n
     if (animationContainerWidth >= small.max) {
         labelFontSize = 11;
     }
+    
+    let buttonHeight = animationContainer.offsetHeight;
+    if (animationContainerWidth < small.max) {
+        buttonHeight += 1;
+    }
 
-    const buttonHeight = animationContainer.offsetHeight;
     // get the label container that animation will be applied to
     const paypalLabelContainer = animationContainer.querySelector(`.${ PAYPAL_BUTTON_LABEL }`) || null;
     const labelStylesObject = (paypalLabelContainer && (paypalLabelContainer.currentStyle || window.getComputedStyle(paypalLabelContainer))) || null;
@@ -86,7 +90,7 @@ const getAnimationProps = function(document, configuration) : AnimationProps | n
 const createAnimation = function (animationProps, cssClasses) : void | null {
     const { ANIMATION_LABEL_CONTAINER, ANIMATION_CONTAINER, DOM_READY, PAYPAL_LOGO } = cssClasses;
     const { buttonHeight, paypalLabelContainerElement, labelFontSize, marginLabelContainer } = animationProps;
-    const blueLayerPosition = Math.round(parseFloat(marginLabelContainer));
+    const blueLayerPosition = Math.round(parseFloat(marginLabelContainer)) + 1;
     const animations = `
         .${ DOM_READY } .${ ANIMATION_CONTAINER } img.${ PAYPAL_LOGO }-paypal{
             animation: 4s move-logo-to-left-side 1s infinite alternate;
@@ -110,8 +114,9 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
             animation: 4s show-text 1s infinite alternate;
             font-size: ${ labelFontSize }px;
             padding-top: 1px;
-            padding-right: 3%;
-            right: 0px;
+            right: 0%;
+            width: 80%;
+            text-align: center;
         }
 
         .${ DOM_READY } .${ ANIMATION.CONTAINER } img.${ LOGO_CLASS.LOGO }-pp{
