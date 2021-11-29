@@ -144,7 +144,7 @@ const createAnimation = function (animationProps, cssClasses) : void | null {
         }
 
         @keyframes show-text {
-            0%,35%{
+            0%,38%{
                 opacity: 0;
             }
             51%, 100% {
